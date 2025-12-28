@@ -1,3 +1,10 @@
 [
   
+,
+{
+  "name": "My plugin",
+  "version": "1.0.0",
+  "description": "A custom plugin made for inkdown",
+  "repository": "https://github.com/furqas/My-plugin"
+}
 ]
