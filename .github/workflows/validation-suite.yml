@@ -1,0 +1,33 @@
+name: Validation Suite
+
+on:
+  pull_request:
+    paths:
+      - 'apps/inkdown-community/*.json'
+      - 'apps/inkdown-community/scripts/*.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for git diff/show in scripts
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Validation Suite
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: bun apps/inkdown-community/scripts/validate-pr.mjs
