@@ -3,8 +3,8 @@ name: Validation Suite
 on:
   pull_request:
     paths:
-      - 'apps/inkdown-community/*.json'
-      - 'apps/inkdown-community/scripts/*.mjs'
+      - '*.json'
+      - 'scripts/*.mjs'
   workflow_dispatch:
 
 permissions:
@@ -30,4 +30,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: bun apps/inkdown-community/scripts/validate-pr.mjs
+        run: bun scripts/validate-pr.mjs

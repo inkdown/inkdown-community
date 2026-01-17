@@ -1,5 +1,5 @@
-const PLUGINS_FILE = 'apps/inkdown-community/plugins.json';
-const THEMES_FILE = 'apps/inkdown-community/themes.json';
+const PLUGINS_FILE = 'plugins.json';
+const THEMES_FILE = 'themes.json';
 const MAIN_BRANCH = 'origin/main';
 
 function runGitCommand(args) {
@@ -48,19 +48,19 @@ async function main() {
   if (pluginsModified) {
     console.log('\n--- Validating Plugins ---');
 
-    if (!runScript('apps/inkdown-community/scripts/validate-json.mjs', ['plugins.json'])) success = false;
+    if (!runScript('scripts/validate-json.mjs', ['plugins.json'])) success = false;
 
-    if (!runScript('apps/inkdown-community/scripts/validate-plugins.mjs')) success = false;
+    if (!runScript('scripts/validate-plugins.mjs')) success = false;
 
-    if (!runScript('apps/inkdown-community/scripts/validate-releases.mjs', ['plugins'])) success = false;
+    if (!runScript('scripts/validate-releases.mjs', ['plugins'])) success = false;
   }
 
   if (themesModified) {
     console.log('\n--- Validating Themes ---');
 
-    if (!runScript('apps/inkdown-community/scripts/validate-json.mjs', ['themes.json'])) success = false;
+    if (!runScript('scripts/validate-json.mjs', ['themes.json'])) success = false;
 
-    if (!runScript('apps/inkdown-community/scripts/validate-releases.mjs', ['themes'])) success = false;
+    if (!runScript('scripts/validate-releases.mjs', ['themes'])) success = false;
   }
 
   // 4. Labeling
