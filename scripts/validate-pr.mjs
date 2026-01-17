@@ -31,18 +31,24 @@ async function main() {
   console.log('Fetching origin main...');
   runGitCommand(['fetch', 'origin', 'main']);
 
-  console.log(`Diffing against ${MAIN_BRANCH}...`);
-  const diffOutput = runGitCommand(['diff', '--name-only', MAIN_BRANCH]);
+  const headSha = runGitCommand(['rev-parse', 'HEAD']);
+  const baseSha = runGitCommand(['rev-parse', 'origin/main']);
+  console.log(`HEAD: ${headSha}`);
+  console.log(`origin/main: ${baseSha}`);
+
+  console.log(`Diffing origin/main...HEAD`);
+  // Use 3-dot diff to find changes reachable from HEAD that are not in origin/main
+  const diffOutput = runGitCommand(['diff', '--name-only', 'origin/main...HEAD']);
 
   if (!diffOutput && diffOutput !== '') {
     console.warn('Warning: git diff returned no output or failed (check logs if verbose).');
   } else {
     console.log('Git Diff Output:\n' + (diffOutput || '(empty)'));
   }
-  const changedFiles = diffOutput.split('\n').filter(Boolean);
+  const changedFiles = diffOutput.split('\n').map(s => s.trim()).filter(Boolean);
 
-  const pluginsModified = changedFiles.some(f => f.includes('plugins.json'));
-  const themesModified = changedFiles.some(f => f.includes('themes.json'));
+  const pluginsModified = changedFiles.some(f => f.includes(PLUGINS_FILE));
+  const themesModified = changedFiles.some(f => f.includes(THEMES_FILE));
 
   console.log(`Modified: Plugins=${pluginsModified}, Themes=${themesModified}`);
 
