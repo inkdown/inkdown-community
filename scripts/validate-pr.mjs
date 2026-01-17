@@ -27,18 +27,20 @@ function runScript(scriptPath, args = []) {
 async function main() {
   console.log('Starting Inkdown PR Orchestrator...\n');
 
-  // Fetch main to ensure we have the reference
-  console.log('Fetching origin main...');
-  runGitCommand(['fetch', 'origin', 'main']);
+  // Determine base branch (CI vs Local)
+  const baseRef = process.env.GITHUB_BASE_REF || 'main'; // GITHUB_BASE_REF is e.g. 'main'
+  const originBase = `origin/${baseRef}`; // e.g. 'origin/main'
+
+  console.log(`Fetching ${originBase}...`);
+  runGitCommand(['fetch', 'origin', baseRef]);
 
   const headSha = runGitCommand(['rev-parse', 'HEAD']);
-  const baseSha = runGitCommand(['rev-parse', 'origin/main']);
+  const baseSha = runGitCommand(['rev-parse', originBase]);
   console.log(`HEAD: ${headSha}`);
-  console.log(`origin/main: ${baseSha}`);
+  console.log(`Base (${originBase}): ${baseSha}`);
 
-  console.log(`Diffing origin/main...HEAD`);
-  // Use 3-dot diff to find changes reachable from HEAD that are not in origin/main
-  const diffOutput = runGitCommand(['diff', '--name-only', 'origin/main...HEAD']);
+  console.log(`Diffing ${originBase}...HEAD`);
+  const diffOutput = runGitCommand(['diff', '--name-only', `${originBase}...HEAD`]);
 
   if (!diffOutput && diffOutput !== '') {
     console.warn('Warning: git diff returned no output or failed (check logs if verbose).');
