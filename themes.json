@@ -1,7 +1,11 @@
 [
   {
+    "id": "gruvbox",
     "name": "Gruvbox",
     "author": "l-furquim",
+    "version": "1.0.0",
+    "description": "Retro groove color scheme for Inkdown",
+    "homepage": "https://github.com/l-furquim/inkdown-gruvbox",
     "repo": "l-furquim/inkdown-gruvbox",
     "screenshot": "dark.png",
     "modes": [
@@ -10,8 +14,12 @@
     ]
   },
   {
+    "id": "solarized",
     "name": "Solarized",
     "author": "inkdown",
+    "version": "1.0.0",
+    "description": "Precision colors for machines and people",
+    "homepage": "https://github.com/inkdown/inkdown-solarized",
     "repo": "inkdown/inkdown-solarized",
     "screenshot": "dark.png",
     "modes": [
