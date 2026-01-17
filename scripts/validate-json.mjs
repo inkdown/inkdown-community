@@ -1,10 +1,10 @@
 const FILES_TO_VALIDATE = [
   {
-    path: 'apps/inkdown-community/plugins.json',
+    path: 'plugins.json',
     schema: ['id', 'name', 'author', 'version', 'description', 'repo'],
   },
   {
-    path: 'apps/inkdown-community/themes.json',
+    path: 'themes.json',
     schema: ['id', 'name', 'author', 'version', 'description', 'repo', 'modes'],
     optional: ['homepage', 'screenshot'],
   }

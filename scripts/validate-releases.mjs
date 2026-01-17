@@ -1,7 +1,7 @@
 import { basename } from 'node:path';
 
-const PLUGINS_FILE = 'apps/inkdown-community/plugins.json';
-const THEMES_FILE = 'apps/inkdown-community/themes.json';
+const PLUGINS_FILE = 'plugins.json';
+const THEMES_FILE = 'themes.json';
 const MAIN_BRANCH = 'origin/main';
 
 function runGitCommand(args) {

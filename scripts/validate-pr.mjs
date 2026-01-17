@@ -6,8 +6,12 @@ function runGitCommand(args) {
   try {
     const cmd = args[0] === 'gh' ? args : ['git', ...args];
     const proc = Bun.spawnSync(cmd);
+    if (proc.exitCode !== 0) {
+      console.error(`Git command failed: ${cmd.join(' ')}\nStderr: ${proc.stderr.toString()}`);
+    }
     return proc.stdout.toString().trim();
   } catch (error) {
+    console.error(`Git execution error: ${error.message}`);
     return '';
   }
 }
@@ -23,7 +27,18 @@ function runScript(scriptPath, args = []) {
 async function main() {
   console.log('Starting Inkdown PR Orchestrator...\n');
 
+  // Fetch main to ensure we have the reference
+  console.log('Fetching origin main...');
+  runGitCommand(['fetch', 'origin', 'main']);
+
+  console.log(`Diffing against ${MAIN_BRANCH}...`);
   const diffOutput = runGitCommand(['diff', '--name-only', MAIN_BRANCH]);
+
+  if (!diffOutput && diffOutput !== '') {
+    console.warn('Warning: git diff returned no output or failed (check logs if verbose).');
+  } else {
+    console.log('Git Diff Output:\n' + (diffOutput || '(empty)'));
+  }
   const changedFiles = diffOutput.split('\n').filter(Boolean);
 
   const pluginsModified = changedFiles.some(f => f.includes('plugins.json'));

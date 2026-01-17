@@ -13,7 +13,7 @@ const FORBIDDEN_TOKENS = [
   { token: '@tauri-apps/', message: 'Direct imports from "@tauri-apps/" are forbidden. Use @inkdown/core native abstractions.' },
 ];
 
-const PLUGINS_FILE = 'apps/inkdown-community/plugins.json';
+const PLUGINS_FILE = 'plugins.json';
 const MAIN_BRANCH = 'origin/main';
 
 function runCommand(command, args, cwd) {
