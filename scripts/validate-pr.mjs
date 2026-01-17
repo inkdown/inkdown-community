@@ -90,6 +90,29 @@ async function main() {
   const prNumber = process.env.PR_NUMBER;
   if (prNumber) {
     console.log(`\n--- Labeling PR #${prNumber} ---`);
+
+    // Ensure labels exist
+    const REQUIRED_LABELS = [
+      { name: 'plugin', color: 'A2EEEF', description: 'Plugin submission' },
+      { name: 'theme', color: 'FEF2C0', description: 'Theme submission' },
+      { name: 'validation-error', color: 'd73a4a', description: 'Validation failed' },
+      { name: 'waiting-for-review', color: 'bfd4f2', description: 'Awaiting manual review' },
+    ];
+
+    for (const label of REQUIRED_LABELS) {
+      // Try to create the label. If it fails (exists), it's fine.
+      // We suppress stderr because 'already exists' is a common error we don't care about here.
+      try {
+        const check = Bun.spawnSync(['gh', 'label', 'list', '--search', label.name]);
+        if (!check.stdout.toString().includes(label.name)) {
+          console.log(`Creating label: ${label.name}`);
+          runGitCommand(['gh', 'label', 'create', label.name, '--color', label.color, '--description', label.description, '--force']);
+        }
+      } catch (e) {
+        // Ignore errors checking/creating labels
+      }
+    }
+
     const labelsToAdd = [];
     const labelsToRemove = [];
 
