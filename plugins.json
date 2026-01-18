@@ -1,10 +1,18 @@
 [
   {
+    "author": "inkdown",
+    "description": "Just a example of how to create inkdown plugins",
     "id": "pdf-export-sample",
     "name": "Plugin pdf sample",
-    "author": "inkdown",
-    "version": "1.0.0",
-    "description": "Just a example of how to create inkdown plugins",
-    "repo": "https://github.com/inkdown/plugin-pdf-sample"
+    "repo": "https://github.com/inkdown/plugin-pdf-sample",
+    "version": "1.0.0"
+  },
+  {
+    "author": "furqas",
+    "description": "poggers",
+    "id": "my-plugin",
+    "name": "meu super plugin",
+    "repo": "furqas/my-plugin",
+    "version": "1.0.0"
   }
 ]
