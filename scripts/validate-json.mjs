@@ -53,6 +53,13 @@ async function validateFile(config) {
     return false;
   }
 
+  if (!Array.isArray(data)) {
+    console.error(`[ERROR] Root element in ${fileName} must be an array.`);
+    return false;
+  }
+
+  let isValid = true;
+
   const ids = new Set();
 
   data.forEach((item, index) => {
