@@ -90,7 +90,7 @@ async function validatePlugin(plugin) {
 }
 
 async function main() {
-  console.log('Starting Inkdown Plugin Validator (Bun Native)...');
+  console.log('Starting Inkdown Plugin Validator');
 
   if (!(await Bun.file(PLUGINS_FILE).exists()) && (await Bun.file(basename(PLUGINS_FILE)).exists())) {
     process.chdir('../..');

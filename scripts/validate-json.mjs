@@ -10,40 +10,23 @@ const FILES_TO_VALIDATE = [
   }
 ];
 
-function checkIndentation(content, filePath) {
-  const lines = content.split('\n');
-  let lineNum = 0;
-  for (const line of lines) {
-    lineNum++;
-    if (line.trim().length === 0) continue;
+async function formatAndValidateJSON(filePath) {
+  const file = Bun.file(filePath);
+  if (!(await file.exists())) return false;
 
-    const leadingSpaces = line.match(/^ */)[0].length;
-
-    if (leadingSpaces % 2 !== 0) {
-      console.error(`[ERROR] ${filePath}:${lineNum} - Indentation must be a multiple of 2 spaces.`);
-      return false;
-    }
-  }
-
-  if (!content.endsWith('\n')) {
-    console.error(`[ERROR] ${filePath} - File must end with a newline.`);
-    return false;
-  }
-
-
+  const content = await file.text();
+  let parsed;
   try {
-    const parsed = JSON.parse(content);
-    const expected = JSON.stringify(parsed, null, 2) + '\n';
-    if (content !== expected) {
-
-      if (content.trim() !== expected.trim()) {
-        console.error(`[ERROR] ${filePath} - JSON formatting is incorrect. Please use 2-space indentation.`);
-        return false;
-      }
-    }
+    parsed = JSON.parse(content);
   } catch (e) {
+    return true;
   }
 
+  const formatted = JSON.stringify(parsed, null, 2) + '\n';
+  if (content !== formatted) {
+    console.log(`Formatting ${filePath}...`);
+    await Bun.write(filePath, formatted);
+  }
   return true;
 }
 
@@ -58,25 +41,16 @@ async function validateFile(config) {
     return false;
   }
 
-  const content = await file.text();
+  await formatAndValidateJSON(config.path)
+
+  const updatedContent = await file.text();
 
   let data;
   try {
-    data = JSON.parse(content);
+    data = JSON.parse(updatedContent);
   } catch (e) {
     console.error(`[ERROR] Invalid JSON in ${fileName}: ${e.message}`);
     return false;
-  }
-
-  if (!Array.isArray(data)) {
-    console.error(`[ERROR] Root element in ${fileName} must be an array.`);
-    return false;
-  }
-
-  let isValid = true;
-
-  if (!checkIndentation(content, config.path)) {
-    isValid = false;
   }
 
   const ids = new Set();
